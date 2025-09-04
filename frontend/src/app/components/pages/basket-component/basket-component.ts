@@ -1,13 +1,18 @@
 import { Component } from '@angular/core';
-import {ContainerComponent} from '../general/container-component/container-component';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-basket-component',
-  imports: [ContainerComponent],
+  standalone: false,
   templateUrl: './basket-component.html',
-  standalone: true,
   styleUrl: './basket-component.css'
 })
 export class BasketComponent {
+  constructor(private readonly router: Router) {
+  }
 
+  async goToProcess() {
+    console.log("Click")
+    await this.router.navigate(['/process-order'])
+  }
 }
