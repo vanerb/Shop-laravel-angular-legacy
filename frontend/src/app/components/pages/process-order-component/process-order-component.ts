@@ -17,8 +17,12 @@ export class ProcessOrderComponent implements OnInit{
   constructor(private basketService: BasketService, private cd: ChangeDetectorRef, private readonly utilitiesService: UtilitiesService) {}
 
   ngOnInit() {
+
+  }
+
+  createPayment(){
     let order: CreateOrder = {
-      "basket_id": 1,
+      "basket_id": 2,
       "total": "200",
       "status": "completed",
       "name": "Vnesa",

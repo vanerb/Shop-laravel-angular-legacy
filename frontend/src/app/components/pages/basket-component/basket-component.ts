@@ -21,7 +21,10 @@ export class BasketComponent implements OnInit {
   ngOnInit() {
     this.basketService.getAllBasketByUser().subscribe({
       next: (basket: Basket) => {
-        this.basket = basket; // forzar nueva referencia
+        if(basket.finished === 0){
+          this.basket = basket; // forzar nueva referencia
+        }
+
         this.cd.detectChanges();
       },
       error: (err) => console.error("Error al cargar productos", err)
@@ -38,32 +41,40 @@ export class BasketComponent implements OnInit {
 
 
 
-   goToProcess() {
-    console.log("Click")
-    this.createOrderProv()
+   async goToProcess() {
+     console.log("Click")
+     await this.router.navigate(['/process-order'])
 
+   }
+
+  calculateTotal(){
+    let total = 0
+     this.basket?.products.forEach(el=>{
+      total += Number.parseFloat(el.price) * el.pivot.quantity
+    })
+
+    return total.toFixed(2)
   }
 
 
-  createOrderProv(){
-    let order: CreateOrder = {
-      "basket_id": 1,
-      "total": "200",
-      "status": "completed",
-      "name": "Vnesa",
-      "email": "vanesa.ribera15@gmail.com",
-      "direction": "C invent",
-      "city": "Calencia",
-      "zip": "3124",
-      "country": "España"
-    }
+  removeProductBasket(item: Product | undefined){
 
-    this.basketService.createOrder(order).subscribe({
-      next: async (order) => {
-        await this.router.navigate(['/process-order'])
-        this.cd.detectChanges();
+    this.basketService.removeProductBasket(item?.id ?? 0).subscribe({
+      next: basket_product  => {
+
+        this.basketService.getAllBasketByUser().subscribe({
+          next: (basket: Basket) => {
+            if(basket.finished === 0){
+              this.basket = basket; // forzar nueva referencia
+            }
+
+
+            this.cd.detectChanges();
+          },
+          error: (err) => console.error("Error al cargar productos", err)
+        });
       },
-      error: err => console.error("Error al cargar productos", err)
+      error: (err) => console.error("Error al cargar productos", err)
     });
   }
 }
