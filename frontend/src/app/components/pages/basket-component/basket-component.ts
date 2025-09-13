@@ -43,7 +43,10 @@ export class BasketComponent implements OnInit {
 
    async goToProcess() {
      console.log("Click")
-     await this.router.navigate(['/process-order'])
+
+
+
+     await this.router.navigate(['/process-order/'+this.basket.id])
 
    }
 
