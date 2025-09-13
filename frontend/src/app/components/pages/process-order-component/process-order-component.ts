@@ -49,7 +49,7 @@ export class ProcessOrderComponent implements OnInit{
   async createPayment() {
     let order: CreateOrder = {
       "basket_id": this.orderId,
-      "total": this.calculateTotal(),
+      "total": this.utilitiesService.calculateTotal(this.basket.products),
       "status": "pending",
       "name": this.form.get('name')?.value,
       "email": this.form.get('email')?.value,
@@ -70,14 +70,7 @@ export class ProcessOrderComponent implements OnInit{
     await this.router.navigate(['my-orders'])
   }
 
-  calculateTotal(){
-    let total = 0
-    this.basket?.products.forEach(el=>{
-      total += Number.parseFloat(el.price) * el.pivot.quantity
-    })
 
-    return total.toFixed(2)
-  }
 
 
 }

@@ -3,7 +3,7 @@ import {Router} from '@angular/router';
 import {UtilitiesService} from '../../../services/utilities-service';
 import {Basket} from '../../../interfaces/basket';
 import {BasketService} from '../../../services/basket-service';
-import {Product} from '../../../interfaces/products';
+import {Images, Product} from '../../../interfaces/products';
 import {CreateOrder} from '../../../interfaces/order';
 
 @Component({
@@ -33,10 +33,7 @@ export class BasketComponent implements OnInit {
 
 
   getImageUrl(item: Product | undefined): string {
-    if (!item || !item.images || item.images.length === 0) {
-      return 'http://localhost:8000/storage/general/no_image.jpg'; // Imagen por defecto si no hay
-    }
-    return `http://localhost:8000/storage/${item.images[0].path}`;
+      return this.utilitiesService.getImageUrl(item?.images[0])
   }
 
 
@@ -51,12 +48,7 @@ export class BasketComponent implements OnInit {
    }
 
   calculateTotal(){
-    let total = 0
-     this.basket?.products.forEach(el=>{
-      total += Number.parseFloat(el.price) * el.pivot.quantity
-    })
-
-    return total.toFixed(2)
+    return this.utilitiesService.calculateTotal(this.basket.products)
   }
 
 
