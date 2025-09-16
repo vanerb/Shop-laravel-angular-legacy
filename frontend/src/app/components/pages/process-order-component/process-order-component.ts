@@ -1,12 +1,11 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {Product} from '../../../interfaces/products';
-import {ProductsService} from '../../../services/products-service';
-import {UtilitiesService} from '../../../services/utilities-service';
 import {BasketService} from '../../../services/basket-service';
 import {CreateOrder} from '../../../interfaces/order';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Basket} from '../../../interfaces/basket';
+import {calculateTotal} from '../../../helpers/utilities.helper';
 
 @Component({
   selector: 'app-process-order-component',
@@ -20,7 +19,7 @@ export class ProcessOrderComponent implements OnInit{
   orderId!: number
   basket!: Basket
 
-  constructor(private basketService: BasketService, private cd: ChangeDetectorRef, private readonly utilitiesService: UtilitiesService,private fb: FormBuilder,private route: ActivatedRoute, private router: Router) {
+  constructor(private basketService: BasketService, private cd: ChangeDetectorRef,private fb: FormBuilder,private route: ActivatedRoute, private router: Router) {
     this.form = this.fb.group({
       name: ['', [Validators.required]],
       email: ['', [Validators.required]],
@@ -49,7 +48,7 @@ export class ProcessOrderComponent implements OnInit{
   async createPayment() {
     let order: CreateOrder = {
       "basket_id": this.orderId,
-      "total": this.utilitiesService.calculateTotal(this.basket.products),
+      "total": calculateTotal(this.basket.products),
       "status": "pending",
       "name": this.form.get('name')?.value,
       "email": this.form.get('email')?.value,

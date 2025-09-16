@@ -1,10 +1,9 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {UtilitiesService} from '../../../services/utilities-service';
 import {Basket} from '../../../interfaces/basket';
 import {BasketService} from '../../../services/basket-service';
-import {Images, Product} from '../../../interfaces/products';
-import {CreateOrder} from '../../../interfaces/order';
+import {Product} from '../../../interfaces/products';
+import {calculateTotal, getImageUrl} from '../../../helpers/utilities.helper';
 
 @Component({
   selector: 'app-basket-component',
@@ -14,7 +13,7 @@ import {CreateOrder} from '../../../interfaces/order';
 })
 export class BasketComponent implements OnInit {
   basket!: Basket
-  constructor(private readonly router: Router,private basketService: BasketService, private cd: ChangeDetectorRef, private readonly utilitiesService: UtilitiesService) {
+  constructor(private readonly router: Router,private basketService: BasketService, private cd: ChangeDetectorRef, ) {
   }
 
 
@@ -33,7 +32,7 @@ export class BasketComponent implements OnInit {
 
 
   getImageUrl(item: Product | undefined): string {
-      return this.utilitiesService.getImageUrl(item?.images[0])
+      return getImageUrl(item?.images[0])
   }
 
 
@@ -48,7 +47,7 @@ export class BasketComponent implements OnInit {
    }
 
   calculateTotal(){
-    return this.utilitiesService.calculateTotal(this.basket.products)
+    return calculateTotal(this.basket.products)
   }
 
 
