@@ -53,22 +53,25 @@ export class BasketComponent implements OnInit {
 
   removeProductBasket(item: Product | undefined){
 
-    this.basketService.removeProductBasket(item?.id ?? 0).subscribe({
-      next: basket_product  => {
+    if(item !== undefined){
+      this.basketService.removeProductBasket(item?.id ?? 0).subscribe({
+        next: basket_product  => {
 
-        this.basketService.getAllBasketByUser().subscribe({
-          next: (basket: Basket) => {
-            if(basket.finished === 0){
-              this.basket = basket; // forzar nueva referencia
-            }
+          this.basketService.getAllBasketByUser().subscribe({
+            next: (basket: Basket) => {
+              if(basket.finished === 0){
+                this.basket = basket; // forzar nueva referencia
+              }
 
 
-            this.cd.detectChanges();
-          },
-          error: (err) => console.error("Error al cargar productos", err)
-        });
-      },
-      error: (err) => console.error("Error al cargar productos", err)
-    });
+              this.cd.detectChanges();
+            },
+            error: (err) => console.error("Error al cargar productos", err)
+          });
+        },
+        error: (err) => console.error("Error al cargar productos", err)
+      });
+    }
+
   }
 }
